@@ -1,34 +1,34 @@
 services:
-  openclaw-gateway:
-    build: .
-    restart: unless-stopped
-    environment:
-      - HOME=/home/node
-      - NODE_ENV=production
-      - TERM=xterm-256color
-      - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
-      - OPENCLAW_GATEWAY_BIND=lan
-      - OPENCLAW_GATEWAY_PORT=18789
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - GOG_KEYRING_PASSWORD=${GOG_KEYRING_PASSWORD}
-      - XDG_CONFIG_HOME=/home/node/.openclaw
-    volumes:
-      - openclaw-config:/home/node/.openclaw
-      - openclaw-workspace:/home/node/.openclaw/workspace
-    ports:
-      - "18789:18789"
-      - "18790:18790"
-    init: true
-    command:
-      [
-        "node",
-        "dist/index.js",
-        "gateway",
-        "--bind",
-        "lan",
-        "--port",
-        "18789",
-      ]
+  # openclaw-gateway:
+  #   build: .
+  #   restart: unless-stopped
+  #   environment:
+  #     - HOME=/home/node
+  #     - NODE_ENV=production
+  #     - TERM=xterm-256color
+  #     - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
+  #     - OPENCLAW_GATEWAY_BIND=lan
+  #     - OPENCLAW_GATEWAY_PORT=18789
+  #     - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  #     - GOG_KEYRING_PASSWORD=${GOG_KEYRING_PASSWORD}
+  #     - XDG_CONFIG_HOME=/home/node/.openclaw
+  #   volumes:
+  #     - openclaw-config:/home/node/.openclaw
+  #     - openclaw-workspace:/home/node/.openclaw/workspace
+  #   ports:
+  #     - "18789:18789"
+  #     - "18790:18790"
+  #   init: true
+  #   command:
+  #     [
+  #       "node",
+  #       "dist/index.js",
+  #       "gateway",
+  #       "--bind",
+  #       "lan",
+  #       "--port",
+  #       "18789",
+  #     ]
 
   openclaw-cli:
     build: .
