@@ -41,6 +41,7 @@ services:
     stdin_open: true
     tty: true
     init: true
+    exclude_from_hc: true
 
 volumes:
   openclaw-config:
