@@ -30,6 +30,18 @@ services:
         "18789",
       ]
 
+  openclaw-cli:
+    build: .
+    environment:
+      - HOME=/home/node
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      - openclaw-config:/home/node/.openclaw
+      - openclaw-workspace:/home/node/.openclaw/workspace
+    stdin_open: true
+    tty: true
+    init: true
+
 volumes:
   openclaw-config:
   openclaw-workspace:
