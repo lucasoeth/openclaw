@@ -1,45 +1,35 @@
 services:
   openclaw-gateway:
-    image: ${OPENCLAW_IMAGE:-openclaw:local}
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
-      CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY}
-      CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY}
-      CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE}
-    volumes:
-      - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
-      - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
-    ports:
-      - "${OPENCLAW_GATEWAY_PORT:-18789}:18789"
-      - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
-    init: true
+    build: .
     restart: unless-stopped
+    environment:
+      - HOME=/home/node
+      - NODE_ENV=production
+      - TERM=xterm-256color
+      - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
+      - OPENCLAW_GATEWAY_BIND=lan
+      - OPENCLAW_GATEWAY_PORT=18789
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOG_KEYRING_PASSWORD=${GOG_KEYRING_PASSWORD}
+      - XDG_CONFIG_HOME=/home/node/.openclaw
+    volumes:
+      - openclaw-config:/home/node/.openclaw
+      - openclaw-workspace:/home/node/.openclaw/workspace
+    ports:
+      - "18789:18789"
+      - "18790:18790"
+    init: true
     command:
       [
         "node",
         "dist/index.js",
         "gateway",
         "--bind",
-        "${OPENCLAW_GATEWAY_BIND:-lan}",
+        "lan",
         "--port",
-        "${OPENCLAW_GATEWAY_PORT:-18789}",
+        "18789",
       ]
 
-  openclaw-cli:
-    image: ${OPENCLAW_IMAGE:-openclaw:local}
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      BROWSER: echo
-      CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY}
-      CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY}
-      CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE}
-    volumes:
-      - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
-      - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
-    stdin_open: true
-    tty: true
-    init: true
-    entrypoint: ["node", "dist/index.js"]
+volumes:
+  openclaw-config:
+  openclaw-workspace:
