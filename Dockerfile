@@ -34,6 +34,9 @@ ENV NODE_ENV=production
 # Security hardening: Run as non-root user
 # The node:22-bookworm image includes a 'node' user (uid 1000)
 # This reduces the attack surface by preventing container escape via root privileges
+# Create config directories with correct ownership BEFORE switching to non-root
+RUN mkdir -p /home/node/.openclaw /home/node/.openclaw/workspace && \
+    chown -R node:node /home/node/.openclaw
 USER node
 
 CMD ["node", "dist/index.js"]
